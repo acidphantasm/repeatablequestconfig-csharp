@@ -1,0 +1,22 @@
+{
+    "InstantRepeatables": true,
+
+    "XpMultiplier": 1,
+    "CurrencyMultiplier": 1,
+    "RepMultiplier": 1,
+    "SkillRewardChanceMultiplier": 1,
+    "SkillPointRewardMultiplier": 1,
+
+    "DailyMinPlayerLevel": 5,
+    "DailyNumberOfQuests": 3,
+    "DailyResetTimer": 86400,
+
+    "WeeklyMinPlayerLevel": 15,
+    "WeeklyNumberOfQuests": 1,
+    "WeeklyResetTimer": 604800,
+
+    "FenceMinPlayerLevel": 1,
+    "FenceNumberOfQuests": 1,
+    "FenceResetTimer": 86400,
+    "RemoveIntelCenterRequirement": true
+}
