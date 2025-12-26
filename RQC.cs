@@ -15,8 +15,8 @@ public record ModMetadata : AbstractModMetadata
     public override string Name { get; init; } = "Repeatable Quest Config";
     public override string Author { get; init; } = "acidphantasm";
     public override List<string>? Contributors { get; init; }
-    public override SemanticVersioning.Version Version { get; init; } = new("2.0.0");
-    public override SemanticVersioning.Range SptVersion { get; init; } = new("~4.0.0");
+    public override SemanticVersioning.Version Version { get; init; } = new("2.0.1");
+    public override SemanticVersioning.Range SptVersion { get; init; } = new("~4.0.9");
     public override List<string>? Incompatibilities { get; init; }
     public override Dictionary<string, SemanticVersioning.Range>? ModDependencies { get; init; }
     public override string? Url { get; init; }
@@ -26,7 +26,6 @@ public record ModMetadata : AbstractModMetadata
 
 [Injectable(TypePriority = OnLoadOrder.PostDBModLoader + 100)]
 public class RQC(
-    Patches patches,
     ConfigServer configServer,
     ISptLogger<RQC> logger,
     ModHelper modHelper)

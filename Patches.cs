@@ -88,9 +88,11 @@ public class CompleteQuestPatch : AbstractPatch
                 replacementRepeatable.Side = repeatableConfig.Side.ToString();
                 quest.ActiveQuests.Add(replacementRepeatable);
                 
-                var newRequirements = new ChangeRequirement();
-                newRequirements.ChangeCost = replacementRepeatable.ChangeCost;
-                newRequirements.ChangeStandingCost = replacementRepeatable.ChangeStandingCost;
+                var newRequirements = new ChangeRequirement()
+                {
+                    ChangeCost = replacementRepeatable.ChangeCost,
+                    ChangeStandingCost = replacementRepeatable.ChangeStandingCost ?? 0,
+                };
 
                 quest.ChangeRequirement[replacementRepeatable.Id] = newRequirements;
 
@@ -116,13 +118,17 @@ public class RemoveIntelCenterPatch : AbstractPatch
     
     protected override MethodBase GetTargetMethod()
     {
-        return typeof(RepeatableQuestController).GetMethod("PlayerHasDailyScavQuestsUnlocked",
-            BindingFlags.NonPublic | BindingFlags.Instance);
+        return AccessTools.Method(typeof(RepeatableQuestController),"PlayerHasDailyScavQuestsUnlocked");
     }
     
     [PatchPrefix]
-    public static bool Prefix(ref bool __result)
+    public static bool Prefix(ref bool __result, PmcData pmcData)
     {
+        if (pmcData.TradersInfo.TryGetValue(Traders.FENCE, out var fence) && fence.Unlocked is not null && !fence.Unlocked.Value)
+        {
+            return true;
+        }
+        
         __result = true;
 
         return false;
