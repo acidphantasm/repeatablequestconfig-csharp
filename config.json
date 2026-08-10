@@ -18,5 +18,30 @@
     "FenceMinPlayerLevel": 1,
     "FenceNumberOfQuests": 1,
     "FenceResetTimer": 86400,
-    "RemoveIntelCenterRequirement": true
+    "RemoveIntelCenterRequirement": true,
+
+    "UseSpecificQuestType": false,
+    "CompletionOnly": false,
+    "ExplorationOnly": false,
+    "EliminationOnly": false,
+
+    "UseRandomQuestType": true,
+    "RandomDailyTypes": [
+        "Exploration",
+        "Elimination",
+        "Completion"
+    ],
+    "RandomWeeklyTypes": [
+        "Exploration",
+        "Elimination",
+        "Completion"
+    ],
+    "RandomFenceTypes": [
+        "Exploration",
+        "Elimination",
+        "Completion",
+        "Pickup"
+    ],
+    
+    "DebugLogging": false
 }
