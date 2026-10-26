@@ -22,6 +22,7 @@ public class GetClientRepeatableQuestsPatch : AbstractPatch
     private static TimeUtil _timeUtil = null!;
     private static ProfileHelper _profileHelper = null!;
     private static RandomUtil _randomUtil = null!;
+    private static RqcModConfig _modConfig = null!;
     private static EliminationQuestGenerator _eliminationQuestGenerator = null!;
     private static CompletionQuestGenerator _completionQuestGenerator = null!;
     private static ExplorationQuestGenerator _explorationQuestGenerator = null!;
@@ -42,7 +43,8 @@ public class GetClientRepeatableQuestsPatch : AbstractPatch
         RandomUtil randomUtil,
         EliminationQuestGenerator eliminationQuestGenerator,
         CompletionQuestGenerator completionQuestGenerator,
-        ExplorationQuestGenerator explorationQuestGenerator)
+        ExplorationQuestGenerator explorationQuestGenerator,
+        RqcModConfig modConfig)
     {
         _logger = logger;
         _questConfig = questConfig;
@@ -52,6 +54,7 @@ public class GetClientRepeatableQuestsPatch : AbstractPatch
         _eliminationQuestGenerator = eliminationQuestGenerator;
         _completionQuestGenerator = completionQuestGenerator;
         _explorationQuestGenerator = explorationQuestGenerator;
+        _modConfig = modConfig;
     }
 
     protected override MethodBase GetTargetMethod()
@@ -78,6 +81,7 @@ public class GetClientRepeatableQuestsPatch : AbstractPatch
 
             if (currentTime < generatedRepeatables.EndTime - 1)
             {
+                RemoveChangeCost(generatedRepeatables);
                 returnData.Add(generatedRepeatables);
                 continue;
             }
@@ -157,6 +161,7 @@ public class GetClientRepeatableQuestsPatch : AbstractPatch
                         ChangeStandingCost = _randomUtil.GetArrayValue(repeatableConfig.StandingChangeCost),
                     });
             }
+            RemoveChangeCost(generatedRepeatables);
 
             generatedRepeatables.FreeChangesAvailable = generatedRepeatables.FreeChanges;
 
@@ -175,5 +180,19 @@ public class GetClientRepeatableQuestsPatch : AbstractPatch
 
         __result = returnData;
         return false;
+    }
+    
+    private static void RemoveChangeCost(PmcDataRepeatableQuest group)
+    {
+        if (!_modConfig.RemoveChangeStandingCost)
+        {
+            return;
+        }
+        
+        foreach (var req in group.ChangeRequirement.Values)
+        {
+            req.ChangeCost = [new ChangeCost { TemplateId = "5449016a4bdc2d6f028b456f", Count = 0 }];
+            req.ChangeStandingCost = 0;
+        }
     }
 }

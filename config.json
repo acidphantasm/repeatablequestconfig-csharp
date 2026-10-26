@@ -1,5 +1,6 @@
 {
     "InstantRepeatables": true,
+    "RemoveChangeStandingCost": false,
 
     "XpMultiplier": 1,
     "CurrencyMultiplier": 1,

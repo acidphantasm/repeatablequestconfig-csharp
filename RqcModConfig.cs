@@ -2,6 +2,7 @@
 
 public class RqcModConfig {
     public bool InstantRepeatables { get; set; } = true;
+    public bool RemoveChangeStandingCost { get; set; } = false;
     public float XpMultiplier { get; set; } = 1;
     public float CurrencyMultiplier {  get; set; } = 1;
     public float RepMultiplier {  get; set; } = 1;

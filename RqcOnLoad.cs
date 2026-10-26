@@ -3,12 +3,15 @@ namespace RepeatableQuestConfig;
 using SPTarkov.Common.Models.Logging;
 using SPTarkov.DI.Annotations;
 using SPTarkov.Server.Core.DI;
+using SPTarkov.Server.Core.Models.Eft.Common.Tables;
 using SPTarkov.Server.Core.Models.Spt.Config;
+using SPTarkov.Server.Core.Models.Spt.Tables;
 using Color=Spectre.Console.Color;
 
 [Injectable(TypePriority = OnLoadOrder.PostLoad + 1337)]
 public class RqcOnLoad(
     QuestConfig questConfig,
+    TemplateTable templateTable,
     RqcModConfig modConfig,
     ISptLogger<RqcOnLoad> logger)
     : IOnLoad
@@ -19,6 +22,7 @@ public class RqcOnLoad(
         // i caps at 2 because 0 = daily, 1 = weekly, 2 = daily savage - edit them all at the same time and reduce code
         for (int i = 0; i <= 2; i++)
         {
+            EditRepeatableChangeCost(i);
             EditRepeatableXp(i);
             EditRepeatableCurrency(i);
             EditRepeatableRep(i);
@@ -31,6 +35,34 @@ public class RqcOnLoad(
 
         RunTypeQuestConfig();
         return Task.CompletedTask;
+    }
+
+    private void EditRepeatableChangeCost(int index)
+    {
+        if (!modConfig.RemoveChangeStandingCost)
+        {
+            return;
+        }
+        
+        var typeOfQuest = questConfig.RepeatableQuests[index];
+        typeOfQuest.FreeChangesAvailable = 99999;
+        typeOfQuest.FreeChanges = 99999;
+        typeOfQuest.StandingChangeCost = new List<double> { 0 };
+
+        var templates = templateTable.RepeatableQuests.Templates;
+        if (templates is null)
+        {
+            return;
+        }
+        foreach (var template in new[] { templates.Elimination, templates.Completion, templates.Exploration, templates.Pickup })
+        {
+            if (template is null)
+            {
+                continue;
+            }
+            template.ChangeCost = [new ChangeCost { TemplateId = "5449016a4bdc2d6f028b456f", Count = 0 }];
+            template.ChangeStandingCost = 0;
+        }
     }
 
     private void EditRepeatableXp(int index)
