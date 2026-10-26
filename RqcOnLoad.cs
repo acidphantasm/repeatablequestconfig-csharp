@@ -33,6 +33,8 @@ public class RqcOnLoad(
             EditRepeatableTimer(i);
         }
 
+        EditRepeatableTemplateCost();
+
         RunTypeQuestConfig();
         return Task.CompletedTask;
     }
@@ -48,12 +50,21 @@ public class RqcOnLoad(
         typeOfQuest.FreeChangesAvailable = 99999;
         typeOfQuest.FreeChanges = 99999;
         typeOfQuest.StandingChangeCost = new List<double> { 0 };
+    }
 
+    private void EditRepeatableTemplateCost()
+    {
+        if (!modConfig.RemoveChangeStandingCost)
+        {
+            return;
+        }
+        
         var templates = templateTable.RepeatableQuests.Templates;
         if (templates is null)
         {
             return;
         }
+        
         foreach (var template in new[] { templates.Elimination, templates.Completion, templates.Exploration, templates.Pickup })
         {
             if (template is null)
